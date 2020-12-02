@@ -40,6 +40,8 @@ Resources:
     Type: "AWSQS::EKS::Cluster"
     Properties:
       RoleArn: !GetAtt serviceRole.Arn
+      KubernetesNetworkConfig:
+        ServiceIpv4Cidr: "192.168.0.0/16"
       ResourcesVpcConfig:
         SubnetIds: !Ref SubnetIds
         SecurityGroupIds: !Ref SecurityGroupIds
@@ -51,6 +53,13 @@ Resources:
           - Arn: "arn:${AWS::Partition}:iam::${AWS::AccountId}:user/my-user"
             Username: "CliUser"
             Groups: ["system:masters"]
+        Roles:
+          - Arn: "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/my-role"
+            Username: "AdminRole"
+            Groups: ["system:masters"]
+      Tags:
+        - Key: ClusterName
+          Value: myCluster
   serviceRole:
     Type: AWS::IAM::Role
     Properties:

@@ -61,6 +61,13 @@ func updateCluster(svc eksiface.EKSAPI, desiredModel *Model) (OperationComplete,
 		}
 		return InProgress, nil
 	}
+	if tagsChanged(*currentModel, *desiredModel) {
+		log.Println("Updating kubernetes tags...")
+		err = updateTags(svc, currentModel, desiredModel)
+		if err != nil {
+			return Complete, err
+		}
+	}
 	return Complete, nil
 }
 
