@@ -1,8 +1,6 @@
 # AWSQS::EKS::Cluster ResourcesVpcConfig
 
-An object representing the VPC configuration to use for an Amazon EKS cluster.
-
-
+An object that represents the virtual private cloud (VPC) configuration to use for an Amazon EKS cluster.
 
 ## Syntax
 
