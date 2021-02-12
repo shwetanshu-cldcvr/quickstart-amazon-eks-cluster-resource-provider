@@ -15,6 +15,16 @@
             "description": "Desired Kubernetes version for your cluster. If you don't specify this value, the cluster uses the latest version from Amazon EKS.",
             "type": "string"
         },
+        "KubernetesNetworkConfig": {
+            "description": "Network configuration for Amazon EKS cluster.\n\n",
+            "type": "object",
+            "properties": {
+                "ServiceIpv4Cidr": {
+                    "description": "Specify the range from which cluster services will receive IPv4 addresses.",
+                    "type": "string"
+                }
+            }
+        },
         "ResourcesVpcConfig": {
             "description": "An object that represents the virtual private cloud (VPC) configuration to use for an Amazon EKS cluster.",
             "type": "object",
@@ -130,6 +140,26 @@
         "OIDCIssuerURL": {
             "description": "Issuer URL for the OpenID Connect identity provider.",
             "type": "string"
+        },
+        "Tags": {
+            "type": "array",
+            "uniqueItems": false,
+            "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "Value": {
+                        "type": "string"
+                  },
+                    "Key": {
+                        "type": "string"
+                  }
+                },
+                "required": [
+                    "Value",
+                    "Key"
+                ]
+            }
         }
     },
     "additionalProperties": false,
@@ -147,6 +177,7 @@
     ],
     "createOnlyProperties": [
         "/properties/Name",
+        "/properties/KubernetesNetworkConfig/ServiceIpv4Cidr",
         "/properties/RoleArn",
         "/properties/ResourcesVpcConfig/SubnetIds",
         "/properties/ResourcesVpcConfig/SecurityGroupIds"
@@ -159,6 +190,8 @@
             "permissions": [
                 "eks:CreateCluster",
                 "eks:DescribeCluster",
+                "eks:ListTagsForResource",
+                "eks:TagResource",
                 "iam:PassRole",
                 "sts:AssumeRole",
                 "kms:*",
@@ -170,6 +203,7 @@
         "read": {
             "permissions": [
                 "eks:DescribeCluster",
+                "eks:ListTagsForResource",
                 "kms:*",
                 "lambda:*",
                 "ec2:*"
@@ -180,6 +214,9 @@
                 "eks:DescribeCluster",
                 "eks:UpdateClusterVersion",
                 "eks:UpdateClusterConfig",
+                "eks:ListTagsForResource",
+                "eks:TagResource",
+                "eks:UntagResource",
                 "iam:PassRole",
                 "kms:*",
                 "lambda:*",
@@ -189,6 +226,7 @@
         "delete": {
             "permissions": [
                 "eks:DescribeCluster",
+                "eks:ListTagsForResource",
                 "eks:DeleteCluster",
                 "kms:*",
                 "lambda:*",
@@ -199,6 +237,7 @@
             "permissions": [
                 "eks:DescribeCluster",
                 "eks:ListClusters",
+                "eks:ListTagsForResource",
                 "kms:*",
                 "lambda:*",
                 "ec2:*"

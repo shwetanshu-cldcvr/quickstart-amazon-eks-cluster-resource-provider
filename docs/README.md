@@ -15,10 +15,12 @@ To declare this entity in your AWS CloudFormation template, use the following sy
         "<a href="#name" title="Name">Name</a>" : <i>String</i>,
         "<a href="#rolearn" title="RoleArn">RoleArn</a>" : <i>String</i>,
         "<a href="#version" title="Version">Version</a>" : <i>String</i>,
+        "<a href="#kubernetesnetworkconfig" title="KubernetesNetworkConfig">KubernetesNetworkConfig</a>" : <i><a href="kubernetesnetworkconfig.md">KubernetesNetworkConfig</a></i>,
         "<a href="#resourcesvpcconfig" title="ResourcesVpcConfig">ResourcesVpcConfig</a>" : <i><a href="resourcesvpcconfig.md">ResourcesVpcConfig</a></i>,
         "<a href="#enabledclusterloggingtypes" title="EnabledClusterLoggingTypes">EnabledClusterLoggingTypes</a>" : <i>[ String, ... ]</i>,
         "<a href="#encryptionconfig" title="EncryptionConfig">EncryptionConfig</a>" : <i>[ [ <a href="encryptionconfig.md">EncryptionConfig</a>, ... ], ... ]</i>,
         "<a href="#kubernetesapiaccess" title="KubernetesApiAccess">KubernetesApiAccess</a>" : <i><a href="kubernetesapiaccess.md">KubernetesApiAccess</a></i>,
+        "<a href="#tags" title="Tags">Tags</a>" : <i>[ [ <a href="tags.md">Tags</a>, ... ], ... ]</i>
     }
 }
 </pre>
@@ -31,6 +33,7 @@ Properties:
     <a href="#name" title="Name">Name</a>: <i>String</i>
     <a href="#rolearn" title="RoleArn">RoleArn</a>: <i>String</i>
     <a href="#version" title="Version">Version</a>: <i>String</i>
+    <a href="#kubernetesnetworkconfig" title="KubernetesNetworkConfig">KubernetesNetworkConfig</a>: <i><a href="kubernetesnetworkconfig.md">KubernetesNetworkConfig</a></i>
     <a href="#resourcesvpcconfig" title="ResourcesVpcConfig">ResourcesVpcConfig</a>: <i><a href="resourcesvpcconfig.md">ResourcesVpcConfig</a></i>
     <a href="#enabledclusterloggingtypes" title="EnabledClusterLoggingTypes">EnabledClusterLoggingTypes</a>: <i>
       - String</i>
@@ -38,6 +41,8 @@ Properties:
       - 
       - <a href="encryptionconfig.md">EncryptionConfig</a></i>
     <a href="#kubernetesapiaccess" title="KubernetesApiAccess">KubernetesApiAccess</a>: <i><a href="kubernetesapiaccess.md">KubernetesApiAccess</a></i>
+    <a href="#tags" title="Tags">Tags</a>: <i>
+      - <a href="tags.md">Tags</a></i>
 </pre>
 
 ## Properties
@@ -69,6 +74,18 @@ Desired Kubernetes version for your cluster. If you don't specify this value, th
 _Required_: No
 
 _Type_: String
+
+_Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
+
+#### KubernetesNetworkConfig
+
+Network configuration for Amazon EKS cluster.
+
+
+
+_Required_: No
+
+_Type_: <a href="kubernetesnetworkconfig.md">KubernetesNetworkConfig</a>
 
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 
@@ -107,6 +124,14 @@ _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormati
 _Required_: No
 
 _Type_: <a href="kubernetesapiaccess.md">KubernetesApiAccess</a>
+
+_Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
+
+#### Tags
+
+_Required_: No
+
+_Type_: List of List of <a href="tags.md">Tags</a>
 
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 

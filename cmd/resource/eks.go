@@ -30,6 +30,9 @@ func describeClusterToModel(cluster eks.Cluster, model *Model) {
 		EndpointPrivateAccess: cluster.ResourcesVpcConfig.EndpointPrivateAccess,
 		PublicAccessCidrs:     aws.StringValueSlice(cluster.ResourcesVpcConfig.PublicAccessCidrs),
 	}
+	model.KubernetesNetworkConfig = &KubernetesNetworkConfig{
+		ServiceIpv4Cidr: cluster.KubernetesNetworkConfig.ServiceIpv4Cidr,
+	}
 	for _, l := range cluster.Logging.ClusterLogging {
 		if *l.Enabled {
 			model.EnabledClusterLoggingTypes = aws.StringValueSlice(l.Types)
@@ -56,6 +59,14 @@ func describeClusterToModel(cluster eks.Cluster, model *Model) {
 			model.OIDCIssuerURL = cluster.Identity.Oidc.Issuer
 		}
 	}
+	if cluster.Tags != nil && len(cluster.Tags) > 0 {
+		for key, value := range cluster.Tags {
+			model.Tags = append(model.Tags, Tags{
+				Key:   &key,
+				Value: value,
+			})
+		}
+	}
 }
 
 func makeCreateClusterInput(model *Model) *eks.CreateClusterInput {
@@ -66,6 +77,9 @@ func makeCreateClusterInput(model *Model) *eks.CreateClusterInput {
 			EndpointPublicAccess:  aws.Bool(true),
 			EndpointPrivateAccess: model.ResourcesVpcConfig.EndpointPrivateAccess,
 		},
+		KubernetesNetworkConfig: &eks.KubernetesNetworkConfigRequest{
+			ServiceIpv4Cidr: model.KubernetesNetworkConfig.ServiceIpv4Cidr,
+		},
 		Logging:          createLogging(model),
 		RoleArn:          model.RoleArn,
 		Version:          model.Version,
@@ -73,6 +87,12 @@ func makeCreateClusterInput(model *Model) *eks.CreateClusterInput {
 	}
 	if model.ResourcesVpcConfig.SecurityGroupIds != nil {
 		input.ResourcesVpcConfig.SecurityGroupIds = aws.StringSlice(model.ResourcesVpcConfig.SecurityGroupIds)
+	}
+	if model.Tags != nil {
+		input.Tags = make(map[string]*string)
+		for _, tag := range model.Tags {
+			input.Tags[*tag.Key] = tag.Value
+		}
 	}
 	return input
 }
@@ -163,6 +183,21 @@ func updateVersionConfig(svc eksiface.EKSAPI, model *Model) error {
 	return err
 }
 
+func updateTags(svc eksiface.EKSAPI, current *Model, desired *Model) error {
+	if desired.Tags != nil && len(desired.Tags) > 0 {
+		input := &eks.TagResourceInput{
+			ResourceArn: current.Arn,
+			Tags:        make(map[string]*string),
+		}
+		for _, tag := range desired.Tags {
+			input.Tags[*tag.Key] = tag.Value
+		}
+		_, err := svc.TagResource(input)
+		return err
+	}
+	return nil
+}
+
 func versionChanged(current Model, desired Model) bool {
 	if desired.Version == nil {
 		return false
@@ -199,6 +234,10 @@ func loggingChanged(current Model, desired Model) bool {
 		return true
 	}
 	return false
+}
+
+func tagsChanged(current Model, desired Model) bool {
+	return desired.Tags != nil && len(desired.Tags) > 0
 }
 
 func slicesEqual(s1 []string, s2 []string) bool {
