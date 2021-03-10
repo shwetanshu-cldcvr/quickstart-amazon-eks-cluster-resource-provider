@@ -9,6 +9,7 @@ import (
 	"math/rand"
 	"reflect"
 	"sort"
+	"strings"
 	"time"
 )
 
@@ -67,6 +68,9 @@ func describeClusterToModel(cluster eks.Cluster, model *Model) {
 			})
 		}
 	}
+	if slicesEqual(model.ResourcesVpcConfig.PublicAccessCidrs, []string{"0.0.0.0/0"}) {
+		model.ResourcesVpcConfig.PublicAccessCidrs = nil
+	}
 }
 
 func makeCreateClusterInput(model *Model) *eks.CreateClusterInput {
@@ -88,7 +92,7 @@ func makeCreateClusterInput(model *Model) *eks.CreateClusterInput {
 	if model.ResourcesVpcConfig.SecurityGroupIds != nil {
 		input.ResourcesVpcConfig.SecurityGroupIds = aws.StringSlice(model.ResourcesVpcConfig.SecurityGroupIds)
 	}
-	if model.Tags != nil {
+	if model.Tags != nil && len(model.Tags) > 0 {
 		input.Tags = make(map[string]*string)
 		for _, tag := range model.Tags {
 			input.Tags[*tag.Key] = tag.Value
@@ -120,6 +124,11 @@ func updateVpcConfig(svc eksiface.EKSAPI, model *Model) error {
 		input.ResourcesVpcConfig.PublicAccessCidrs = aws.StringSlice(model.ResourcesVpcConfig.PublicAccessCidrs)
 	}
 	_, err := svc.UpdateClusterConfig(input)
+	if err != nil {
+		if strings.Contains(err.Error(), "Cluster is already at the desired configuration") {
+			return nil
+		}
+	}
 	return err
 }
 
@@ -215,6 +224,9 @@ func vpcChanged(current Model, desired Model) bool {
 	if desiredVpc.PublicAccessCidrs == nil {
 		desiredVpc.PublicAccessCidrs = []string{"0.0.0.0/0"}
 	}
+	if currentVpc.PublicAccessCidrs == nil {
+		currentVpc.PublicAccessCidrs = []string{"0.0.0.0/0"}
+	}
 	if desiredVpc.EndpointPrivateAccess == nil {
 		desiredVpc.EndpointPrivateAccess = aws.Bool(false)
 	}
@@ -268,11 +280,16 @@ func matchesAwsErrorCode(err error, code string) bool {
 }
 
 func isPrivate(model *Model) bool {
-	if !*model.ResourcesVpcConfig.EndpointPublicAccess {
-		return true
+	if model.ResourcesVpcConfig == nil {
+		return false
+	}
+	if model.ResourcesVpcConfig.EndpointPublicAccess != nil {
+		if !*model.ResourcesVpcConfig.EndpointPublicAccess {
+			return true
+		}
 	}
 	cidrs := model.ResourcesVpcConfig.PublicAccessCidrs
-	if cidrs == nil {
+	if cidrs == nil || len(cidrs) == 0 {
 		return false
 	}
 	for _, cidr := range cidrs {

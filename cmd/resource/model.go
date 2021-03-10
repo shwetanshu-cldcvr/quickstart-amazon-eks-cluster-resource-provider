@@ -6,6 +6,7 @@ package resource
 type Model struct {
 	Name                       *string                  `json:",omitempty"`
 	RoleArn                    *string                  `json:",omitempty"`
+	LambdaRoleName             *string                  `json:",omitempty"`
 	Version                    *string                  `json:",omitempty"`
 	KubernetesNetworkConfig    *KubernetesNetworkConfig `json:",omitempty"`
 	ResourcesVpcConfig         *ResourcesVpcConfig      `json:",omitempty"`

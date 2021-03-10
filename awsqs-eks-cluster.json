@@ -5,19 +5,27 @@
     "properties": {
         "Name": {
             "description": "A unique name for your cluster.",
-            "type": "string"
+            "type": "string",
+            "minLength": 1
         },
         "RoleArn": {
             "description": "Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role. This provides permissions for Amazon EKS to call other AWS APIs.",
             "type": "string"
         },
+        "LambdaRoleName": {
+            "description": "Name of the AWS Identity and Access Management (IAM) role used for clusters that have the public endpoint disabled. this provides permissions for Lambda to be invoked and attach to the cluster VPC",
+            "type": "string",
+            "default": "CloudFormation-Kubernetes-VPC"
+        },
         "Version": {
             "description": "Desired Kubernetes version for your cluster. If you don't specify this value, the cluster uses the latest version from Amazon EKS.",
-            "type": "string"
+            "type": "string",
+            "default": "1.19"
         },
         "KubernetesNetworkConfig": {
             "description": "Network configuration for Amazon EKS cluster.\n\n",
             "type": "object",
+            "additionalProperties": false,
             "properties": {
                 "ServiceIpv4Cidr": {
                     "description": "Specify the range from which cluster services will receive IPv4 addresses.",
@@ -67,6 +75,7 @@
             "items": {
                 "description": "The encryption configuration for the cluster.",
                 "type": "object",
+                "additionalProperties": false,
                 "properties": {
                     "Resources": {
                         "type": "array",
@@ -79,6 +88,7 @@
                     "Provider": {
                         "description": "AWS Key Management Service (AWS KMS) customer master key (CMK). Either the ARN or the alias can be used.",
                         "type": "object",
+                        "additionalProperties": false,
                         "properties": {
                             "KeyArn": {
                                 "description": "Amazon Resource Name (ARN) or alias of the customer master key (CMK). The CMK must be symmetric, created in the same region as the cluster, and if the CMK was created in a different account, the user must have access to the CMK.",
@@ -91,11 +101,13 @@
         },
         "KubernetesApiAccess": {
             "type": "object",
+            "additionalProperties": false,
             "properties": {
                 "Roles": {
                     "type": "array",
                     "items": {
                         "type": "object",
+                        "additionalProperties": false,
                         "properties": {
                             "Arn": {"type": "string"},
                             "Username": {"type": "string"},
@@ -107,6 +119,7 @@
                     "type": "array",
                     "items": {
                         "type": "object",
+                        "additionalProperties": false,
                         "properties": {
                             "Arn": {"type": "string"},
                             "Username": {"type": "string"},
@@ -188,29 +201,45 @@
     "handlers": {
         "create": {
             "permissions": [
+                "sts:GetCallerIdentity",
                 "eks:CreateCluster",
                 "eks:DescribeCluster",
                 "eks:ListTagsForResource",
                 "eks:TagResource",
                 "iam:PassRole",
                 "sts:AssumeRole",
-                "kms:*",
-                "lambda:*",
-                "ec2:*",
-                "iam:*"
+                "lambda:UpdateFunctionConfiguration",
+                "lambda:DeleteFunction",
+                "lambda:GetFunction",
+                "lambda:Invoke",
+                "lambda:CreateFunction",
+                "lambda:UpdateFunctionCode",
+                "ec2:DescribeVpcs",
+                "ec2:DescribeSubnets",
+                "ec2:DescribeSecurityGroups",
+                "iam:PassRole"
             ]
         },
         "read": {
             "permissions": [
+                "sts:GetCallerIdentity",
                 "eks:DescribeCluster",
                 "eks:ListTagsForResource",
-                "kms:*",
-                "lambda:*",
-                "ec2:*"
+                "lambda:UpdateFunctionConfiguration",
+                "lambda:DeleteFunction",
+                "lambda:GetFunction",
+                "lambda:Invoke",
+                "lambda:CreateFunction",
+                "lambda:UpdateFunctionCode",
+                "ec2:DescribeVpcs",
+                "ec2:DescribeSubnets",
+                "ec2:DescribeSecurityGroups",
+                "iam:PassRole"
             ]
         },
         "update": {
             "permissions": [
+                "sts:GetCallerIdentity",
                 "eks:DescribeCluster",
                 "eks:UpdateClusterVersion",
                 "eks:UpdateClusterConfig",
@@ -218,29 +247,51 @@
                 "eks:TagResource",
                 "eks:UntagResource",
                 "iam:PassRole",
-                "kms:*",
-                "lambda:*",
-                "ec2:*"
+                "lambda:UpdateFunctionConfiguration",
+                "lambda:DeleteFunction",
+                "lambda:GetFunction",
+                "lambda:Invoke",
+                "lambda:CreateFunction",
+                "lambda:UpdateFunctionCode",
+                "ec2:DescribeVpcs",
+                "ec2:DescribeSubnets",
+                "ec2:DescribeSecurityGroups"
             ]
         },
         "delete": {
             "permissions": [
+                "sts:GetCallerIdentity",
                 "eks:DescribeCluster",
                 "eks:ListTagsForResource",
                 "eks:DeleteCluster",
-                "kms:*",
-                "lambda:*",
-                "ec2:*"
+                "lambda:UpdateFunctionConfiguration",
+                "lambda:DeleteFunction",
+                "lambda:GetFunction",
+                "lambda:Invoke",
+                "lambda:CreateFunction",
+                "lambda:UpdateFunctionCode",
+                "ec2:DescribeVpcs",
+                "ec2:DescribeSubnets",
+                "ec2:DescribeSecurityGroups",
+                "iam:PassRole"
             ]
         },
         "list": {
             "permissions": [
+                "sts:GetCallerIdentity",
                 "eks:DescribeCluster",
                 "eks:ListClusters",
                 "eks:ListTagsForResource",
-                "kms:*",
-                "lambda:*",
-                "ec2:*"
+                "lambda:UpdateFunctionConfiguration",
+                "lambda:DeleteFunction",
+                "lambda:GetFunction",
+                "lambda:Invoke",
+                "lambda:CreateFunction",
+                "lambda:UpdateFunctionCode",
+                "ec2:DescribeVpcs",
+                "ec2:DescribeSubnets",
+                "ec2:DescribeSecurityGroups",
+                "iam:PassRole"
             ]
         }
     }

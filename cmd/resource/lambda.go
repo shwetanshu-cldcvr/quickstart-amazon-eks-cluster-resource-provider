@@ -10,9 +10,9 @@ import (
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/eks"
-	"github.com/aws/aws-sdk-go/service/iam"
 	"github.com/aws/aws-sdk-go/service/lambda"
 	"github.com/aws/aws-sdk-go/service/lambda/lambdaiface"
+	"github.com/aws/aws-sdk-go/service/sts"
 	"io/ioutil"
 	"log"
 )
@@ -57,10 +57,13 @@ func putFunction(sess *session.Session, model *Model, reInvoke bool) (OperationC
 	if reInvoke {
 		return stabilizeFunction(svc, model, aws.String(FunctionNamePrefix+*model.Name))
 	}
-	roleArn, err := putRole(iam.New(sess))
+	caller, err := getCaller(sts.New(sess))
 	if err != nil {
 		return Complete, err
 	}
+	accId := accountIdFromArn(caller)
+	partition := partitionFromArn(caller)
+	roleArn := aws.String("arn:" + *partition + ":iam::" + *accId + ":role/" + *model.LambdaRoleName)
 
 	clusterName := model.Name
 	vpcConfig := *model.ResourcesVpcConfig

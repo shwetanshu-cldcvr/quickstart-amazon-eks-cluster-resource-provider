@@ -7,6 +7,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/eks"
 	"log"
 	"runtime/debug"
+	"strings"
 )
 
 func Create(req handler.Request, _ *Model, model *Model) (handler.ProgressEvent, error) {
@@ -43,7 +44,11 @@ func createInit(req handler.Request, model *Model) handler.ProgressEvent {
 		model.Name = generateClusterName()
 	}
 	_, err := createCluster(eksClient, model, false)
-	return makeEvent(model, LambdaInitStage, err)
+	if isPrivate(model) {
+		return makeEvent(model, LambdaInitStage, err)
+	} else {
+		return makeEvent(model, ClusterStablilize, err)
+	}
 }
 
 func initLambda(req handler.Request, model *Model) handler.ProgressEvent {
@@ -71,6 +76,12 @@ func createClusterStabilize(req handler.Request, model *Model) handler.ProgressE
 func createIamAuthHandler(req handler.Request, model *Model) handler.ProgressEvent {
 	eksClient := eks.New(req.Session)
 	err := createIamAuth(req.Session, eksClient, model)
+	if err != nil {
+		if strings.Contains(err.Error(), "i/o timeout") {
+			return makeEvent(model, IamAuthStage, nil)
+		}
+		panic(err)
+	}
 	return makeEvent(model, UpdateClusterStage, err)
 }
 
@@ -92,7 +103,6 @@ func Read(req handler.Request, _ *Model, model *Model) (handler.ProgressEvent, e
 	svc := eks.New(req.Session)
 	progress := readCluster(svc, model)
 	return progress, nil
-	//return readIamAuth(req.Session, svc, progress), nil
 }
 
 func Update(req handler.Request, _ *Model, model *Model) (handler.ProgressEvent, error) {
@@ -100,11 +110,17 @@ func Update(req handler.Request, _ *Model, model *Model) (handler.ProgressEvent,
 	eksClient := eks.New(req.Session)
 	clusterComplete, err := updateCluster(eksClient, model)
 	if err != nil {
+		if matchesAwsErrorCode(err, eks.ErrCodeResourceNotFoundException) {
+
+		}
 		return errorEvent(model, err), nil
 	}
-	functionComplete, err := putFunction(req.Session, model, false)
-	if err != nil {
-		return errorEvent(model, err), nil
+	var functionComplete OperationComplete = true
+	if isPrivate(model) {
+		functionComplete, err = putFunction(req.Session, model, false)
+		if err != nil {
+			return errorEvent(model, err), nil
+		}
 	}
 	if clusterComplete && functionComplete {
 		err = updateIamAuth(req.Session, eksClient, model)
@@ -118,11 +134,17 @@ func Update(req handler.Request, _ *Model, model *Model) (handler.ProgressEvent,
 
 func Delete(req handler.Request, _ *Model, model *Model) (handler.ProgressEvent, error) {
 	defer logPanic()
-	err := deleteFunction(req.Session, model, req.CallbackContext)
-	if err != nil {
-		return errorEvent(model, err), nil
+	if isPrivate(model) {
+		err := deleteFunction(req.Session, model, req.CallbackContext)
+		if err != nil {
+			return errorEvent(model, err), nil
+		}
 	}
-	return deleteCluster(eks.New(req.Session), model), nil
+	callback := true
+	if req.CallbackContext == nil {
+		callback = false
+	}
+	return deleteCluster(eks.New(req.Session), model, callback), nil
 }
 
 func List(req handler.Request, _ *Model, _ *Model) (handler.ProgressEvent, error) {

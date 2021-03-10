@@ -5,6 +5,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/eks"
 	"github.com/aws/aws-sdk-go/service/eks/eksiface"
 	"log"
+	"strings"
 )
 
 func createCluster(svc eksiface.EKSAPI, model *Model, reInvoke bool) (OperationComplete, error) {
@@ -71,15 +72,25 @@ func updateCluster(svc eksiface.EKSAPI, desiredModel *Model) (OperationComplete,
 	return Complete, nil
 }
 
-func deleteCluster(svc eksiface.EKSAPI, model *Model) handler.ProgressEvent {
+func deleteCluster(svc eksiface.EKSAPI, model *Model, callback bool) handler.ProgressEvent {
+	if !callback {
+		input := &eks.DescribeClusterInput{Name: model.Name}
+		_, err := svc.DescribeCluster(input)
+		if err != nil {
+			return errorEvent(model, err)
+		}
+	}
 	_, complete, status, err := stabilize(svc, model, "DELETED")
 	if complete {
-		return successEvent(model)
+		return successEvent(nil)
 	}
-	if status == "ACTIVE" || status == "FAILED" {
-		_, createErr := svc.DeleteCluster(&eks.DeleteClusterInput{Name: model.Name})
-		if createErr != nil {
-			return errorEvent(model, createErr)
+	if status == "ACTIVE" || status == "FAILED" || status == "CREATING" {
+		_, deleteErr := svc.DeleteCluster(&eks.DeleteClusterInput{Name: model.Name})
+		if deleteErr != nil {
+			if strings.Contains(deleteErr.Error(), "Cannot delete because cluster ") && strings.Contains(deleteErr.Error(), " in progress") {
+				return inProgressEvent(model, DeleteClusterStage)
+			}
+			return errorEvent(model, deleteErr)
 		}
 	}
 	if err != nil {
@@ -93,7 +104,7 @@ func listClusters(svc eksiface.EKSAPI) handler.ProgressEvent {
 	if err != nil {
 		return errorEvent(nil, err)
 	}
-	models := make([]interface{}, 1)
+	models := make([]interface{}, 0)
 	for _, m := range response.Clusters {
 		models = append(models, &Model{Name: m})
 	}

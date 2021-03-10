@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	callbackDelaySeconds int64 = 120
+	callbackDelaySeconds int64 = 15
 )
 
 func errorEvent(model *Model, err error) handler.ProgressEvent {

@@ -14,6 +14,7 @@ To declare this entity in your AWS CloudFormation template, use the following sy
     "Properties" : {
         "<a href="#name" title="Name">Name</a>" : <i>String</i>,
         "<a href="#rolearn" title="RoleArn">RoleArn</a>" : <i>String</i>,
+        "<a href="#lambdarolename" title="LambdaRoleName">LambdaRoleName</a>" : <i>String</i>,
         "<a href="#version" title="Version">Version</a>" : <i>String</i>,
         "<a href="#kubernetesnetworkconfig" title="KubernetesNetworkConfig">KubernetesNetworkConfig</a>" : <i><a href="kubernetesnetworkconfig.md">KubernetesNetworkConfig</a></i>,
         "<a href="#resourcesvpcconfig" title="ResourcesVpcConfig">ResourcesVpcConfig</a>" : <i><a href="resourcesvpcconfig.md">ResourcesVpcConfig</a></i>,
@@ -32,6 +33,7 @@ Type: AWSQS::EKS::Cluster
 Properties:
     <a href="#name" title="Name">Name</a>: <i>String</i>
     <a href="#rolearn" title="RoleArn">RoleArn</a>: <i>String</i>
+    <a href="#lambdarolename" title="LambdaRoleName">LambdaRoleName</a>: <i>String</i>
     <a href="#version" title="Version">Version</a>: <i>String</i>
     <a href="#kubernetesnetworkconfig" title="KubernetesNetworkConfig">KubernetesNetworkConfig</a>: <i><a href="kubernetesnetworkconfig.md">KubernetesNetworkConfig</a></i>
     <a href="#resourcesvpcconfig" title="ResourcesVpcConfig">ResourcesVpcConfig</a>: <i><a href="resourcesvpcconfig.md">ResourcesVpcConfig</a></i>
@@ -42,6 +44,7 @@ Properties:
       - <a href="encryptionconfig.md">EncryptionConfig</a></i>
     <a href="#kubernetesapiaccess" title="KubernetesApiAccess">KubernetesApiAccess</a>: <i><a href="kubernetesapiaccess.md">KubernetesApiAccess</a></i>
     <a href="#tags" title="Tags">Tags</a>: <i>
+      - 
       - <a href="tags.md">Tags</a></i>
 </pre>
 
@@ -55,6 +58,8 @@ _Required_: No
 
 _Type_: String
 
+_Minimum_: <code>1</code>
+
 _Update requires_: [Replacement](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-replacement)
 
 #### RoleArn
@@ -66,6 +71,16 @@ _Required_: Yes
 _Type_: String
 
 _Update requires_: [Replacement](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-replacement)
+
+#### LambdaRoleName
+
+Name of the AWS Identity and Access Management (IAM) role used for clusters that have the public endpoint disabled. this provides permissions for Lambda to be invoked and attach to the cluster VPC
+
+_Required_: No
+
+_Type_: String
+
+_Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 
 #### Version
 
