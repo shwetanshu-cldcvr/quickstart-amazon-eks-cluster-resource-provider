@@ -163,10 +163,10 @@
                 "properties": {
                     "Value": {
                         "type": "string"
-                  },
+                    },
                     "Key": {
                         "type": "string"
-                  }
+                    }
                 },
                 "required": [
                     "Value",
@@ -217,7 +217,8 @@
                 "ec2:DescribeVpcs",
                 "ec2:DescribeSubnets",
                 "ec2:DescribeSecurityGroups",
-                "iam:PassRole"
+                "iam:PassRole",
+                "kms:*"
             ]
         },
         "read": {
@@ -234,7 +235,8 @@
                 "ec2:DescribeVpcs",
                 "ec2:DescribeSubnets",
                 "ec2:DescribeSecurityGroups",
-                "iam:PassRole"
+                "iam:PassRole",
+                "kms:*"
             ]
         },
         "update": {
@@ -255,7 +257,8 @@
                 "lambda:UpdateFunctionCode",
                 "ec2:DescribeVpcs",
                 "ec2:DescribeSubnets",
-                "ec2:DescribeSecurityGroups"
+                "ec2:DescribeSecurityGroups",
+                "kms:*"
             ]
         },
         "delete": {
@@ -273,7 +276,8 @@
                 "ec2:DescribeVpcs",
                 "ec2:DescribeSubnets",
                 "ec2:DescribeSecurityGroups",
-                "iam:PassRole"
+                "iam:PassRole",
+                "kms:*"
             ]
         },
         "list": {
@@ -291,7 +295,8 @@
                 "ec2:DescribeVpcs",
                 "ec2:DescribeSubnets",
                 "ec2:DescribeSecurityGroups",
-                "iam:PassRole"
+                "iam:PassRole",
+                "kms:*"
             ]
         }
     }
