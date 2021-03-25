@@ -76,13 +76,9 @@ func describeClusterToModel(cluster eks.Cluster, model *Model) {
 func makeCreateClusterInput(model *Model) *eks.CreateClusterInput {
 	var cidr *string
 	if model.KubernetesNetworkConfig == nil {
-		cidr = aws.String("0.0.0.0/0")
+		cidr = nil
 	} else {
-		if model.KubernetesNetworkConfig.ServiceIpv4Cidr == nil {
-			cidr = aws.String("0.0.0.0/0")
-		} else {
-			cidr = model.KubernetesNetworkConfig.ServiceIpv4Cidr
-		}
+		cidr = model.KubernetesNetworkConfig.ServiceIpv4Cidr
 	}
 	input := &eks.CreateClusterInput{
 		Name: model.Name,
