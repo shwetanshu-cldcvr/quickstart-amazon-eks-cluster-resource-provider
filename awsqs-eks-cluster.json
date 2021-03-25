@@ -211,14 +211,16 @@
                 "lambda:UpdateFunctionConfiguration",
                 "lambda:DeleteFunction",
                 "lambda:GetFunction",
-                "lambda:Invoke",
+                "lambda:InvokeFunction",
                 "lambda:CreateFunction",
                 "lambda:UpdateFunctionCode",
                 "ec2:DescribeVpcs",
                 "ec2:DescribeSubnets",
                 "ec2:DescribeSecurityGroups",
                 "iam:PassRole",
-                "kms:*"
+                "cloudformation:ListExports",
+                "kms:DescribeKey",
+                "kms:CreateGrant"
             ]
         },
         "read": {
@@ -229,14 +231,16 @@
                 "lambda:UpdateFunctionConfiguration",
                 "lambda:DeleteFunction",
                 "lambda:GetFunction",
-                "lambda:Invoke",
+                "lambda:InvokeFunction",
                 "lambda:CreateFunction",
                 "lambda:UpdateFunctionCode",
                 "ec2:DescribeVpcs",
                 "ec2:DescribeSubnets",
                 "ec2:DescribeSecurityGroups",
                 "iam:PassRole",
-                "kms:*"
+                "cloudformation:ListExports",
+                "kms:DescribeKey",
+                "kms:CreateGrant"
             ]
         },
         "update": {
@@ -252,13 +256,15 @@
                 "lambda:UpdateFunctionConfiguration",
                 "lambda:DeleteFunction",
                 "lambda:GetFunction",
-                "lambda:Invoke",
+                "lambda:InvokeFunction",
                 "lambda:CreateFunction",
                 "lambda:UpdateFunctionCode",
                 "ec2:DescribeVpcs",
                 "ec2:DescribeSubnets",
                 "ec2:DescribeSecurityGroups",
-                "kms:*"
+                "cloudformation:ListExports",
+                "kms:DescribeKey",
+                "kms:CreateGrant"
             ]
         },
         "delete": {
@@ -270,14 +276,16 @@
                 "lambda:UpdateFunctionConfiguration",
                 "lambda:DeleteFunction",
                 "lambda:GetFunction",
-                "lambda:Invoke",
+                "lambda:InvokeFunction",
                 "lambda:CreateFunction",
                 "lambda:UpdateFunctionCode",
                 "ec2:DescribeVpcs",
                 "ec2:DescribeSubnets",
                 "ec2:DescribeSecurityGroups",
                 "iam:PassRole",
-                "kms:*"
+                "cloudformation:ListExports",
+                "kms:DescribeKey",
+                "kms:CreateGrant"
             ]
         },
         "list": {
@@ -289,14 +297,16 @@
                 "lambda:UpdateFunctionConfiguration",
                 "lambda:DeleteFunction",
                 "lambda:GetFunction",
-                "lambda:Invoke",
+                "lambda:InvokeFunction",
                 "lambda:CreateFunction",
                 "lambda:UpdateFunctionCode",
                 "ec2:DescribeVpcs",
                 "ec2:DescribeSubnets",
                 "ec2:DescribeSecurityGroups",
                 "iam:PassRole",
-                "kms:*"
+                "cloudformation:ListExports",
+                "kms:DescribeKey",
+                "kms:CreateGrant"
             ]
         }
     }
