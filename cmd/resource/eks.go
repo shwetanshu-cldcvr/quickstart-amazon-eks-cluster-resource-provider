@@ -74,6 +74,16 @@ func describeClusterToModel(cluster eks.Cluster, model *Model) {
 }
 
 func makeCreateClusterInput(model *Model) *eks.CreateClusterInput {
+	var cidr *string
+	if model.KubernetesNetworkConfig == nil {
+		cidr = aws.String("0.0.0.0/0")
+	} else {
+		if model.KubernetesNetworkConfig.ServiceIpv4Cidr == nil {
+			cidr = aws.String("0.0.0.0/0")
+		} else {
+			cidr = model.KubernetesNetworkConfig.ServiceIpv4Cidr
+		}
+	}
 	input := &eks.CreateClusterInput{
 		Name: model.Name,
 		ResourcesVpcConfig: &eks.VpcConfigRequest{
@@ -82,7 +92,7 @@ func makeCreateClusterInput(model *Model) *eks.CreateClusterInput {
 			EndpointPrivateAccess: model.ResourcesVpcConfig.EndpointPrivateAccess,
 		},
 		KubernetesNetworkConfig: &eks.KubernetesNetworkConfigRequest{
-			ServiceIpv4Cidr: model.KubernetesNetworkConfig.ServiceIpv4Cidr,
+			ServiceIpv4Cidr: cidr,
 		},
 		Logging:          createLogging(model),
 		RoleArn:          model.RoleArn,
