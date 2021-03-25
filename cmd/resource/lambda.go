@@ -63,7 +63,13 @@ func putFunction(sess *session.Session, model *Model, reInvoke bool) (OperationC
 	}
 	accId := accountIdFromArn(caller)
 	partition := partitionFromArn(caller)
-	roleArn := aws.String("arn:" + *partition + ":iam::" + *accId + ":role/" + *model.LambdaRoleName)
+	var rolename string
+	if model.LambdaRoleName == nil {
+		rolename = "CloudFormation-Kubernetes-VPC"
+	} else {
+		rolename = *model.LambdaRoleName
+	}
+	roleArn := aws.String("arn:" + *partition + ":iam::" + *accId + ":role/" + rolename)
 
 	clusterName := model.Name
 	vpcConfig := *model.ResourcesVpcConfig
