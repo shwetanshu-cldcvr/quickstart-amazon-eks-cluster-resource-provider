@@ -30,6 +30,13 @@ func readCluster(svc eksiface.EKSAPI, model *Model) handler.ProgressEvent {
 	return successEvent(model)
 }
 
+func updateInProgress(err error) bool {
+	if strings.Contains(err.Error(), "currently has update") && strings.Contains(err.Error(), "in progress") {
+		return true
+	}
+	return false
+}
+
 func updateCluster(svc eksiface.EKSAPI, desiredModel *Model) (OperationComplete, error) {
 	currentModel, complete, _, err := stabilize(svc, desiredModel, "ACTIVE")
 	if err != nil {
@@ -42,6 +49,9 @@ func updateCluster(svc eksiface.EKSAPI, desiredModel *Model) (OperationComplete,
 		log.Println("Updating VPC config...")
 		err := updateVpcConfig(svc, desiredModel)
 		if err != nil {
+			if updateInProgress(err) {
+				return InProgress, nil
+			}
 			return Complete, err
 		}
 		return InProgress, nil
@@ -50,6 +60,9 @@ func updateCluster(svc eksiface.EKSAPI, desiredModel *Model) (OperationComplete,
 		log.Println("Updating logging config...")
 		err := updateLoggingConfig(svc, desiredModel)
 		if err != nil {
+			if updateInProgress(err) {
+				return InProgress, nil
+			}
 			return Complete, err
 		}
 		return InProgress, nil
@@ -58,6 +71,9 @@ func updateCluster(svc eksiface.EKSAPI, desiredModel *Model) (OperationComplete,
 		log.Println("Updating kubernetes version...")
 		err := updateVersionConfig(svc, desiredModel)
 		if err != nil {
+			if updateInProgress(err) {
+				return InProgress, nil
+			}
 			return Complete, err
 		}
 		return InProgress, nil
@@ -66,6 +82,9 @@ func updateCluster(svc eksiface.EKSAPI, desiredModel *Model) (OperationComplete,
 		log.Println("Updating kubernetes tags...")
 		err = updateTags(svc, currentModel, desiredModel)
 		if err != nil {
+			if updateInProgress(err) {
+				return InProgress, nil
+			}
 			return Complete, err
 		}
 	}
