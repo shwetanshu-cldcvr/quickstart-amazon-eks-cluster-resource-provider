@@ -20,13 +20,17 @@ Conditions:
 Resources:
   ResourceVersion:
     Type: AWS::CloudFormation::ResourceVersion
+    Metadata:
+      DependsOn: 
+      - !If [CreateRole, !Ref ExecutionRole, !Ref 'AWS::NoValue']
+      - !If [CreateRole, !Ref LogDeliveryRole, !Ref 'AWS::NoValue']
     Properties:
       TypeName: AWSQS::EKS::Cluster
       LoggingConfig:
         LogGroupName: awsqs-eks-cluster-logs
-        LogRoleArn: !GetAtt LogDeliveryRole.Arn
+        LogRoleArn: !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:role/eks-cluster-log-delivery'
       SchemaHandlerPackage: !Ref HandlerPackage
-      ExecutionRoleArn: !GetAtt ExecutionRole.Arn
+      ExecutionRoleArn: !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:role/eks-cluster-execution'
   ResourceDefaultVersion:
     Type: AWS::CloudFormation::ResourceDefaultVersion
     Properties:
