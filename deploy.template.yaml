@@ -3,20 +3,39 @@ Description: "deploy the AWSQS::EKS::Cluster resource into CloudFormation regist
 Parameters:
   CreateClusterAccessRole:
     Type: String
-    Default: 'true'
+    Default: 'Enabled'
     AllowedValues:
-      - 'true'
-      - 'false'
+      - 'Enabled'
+      - 'Disabled'
   PermissionsBoundary:
     Type: String
     Default: ''
+  HandlerPackage:
+    Type: String
+    Description: S3 path for handler package
+    Default: s3://aws-quickstart/quickstart-amazon-eks-cluster-resource-provider/awsqs-eks-cluster.zip
 Conditions:
   CreateRole: !Equals [!Ref CreateClusterAccessRole, 'true']
   PermissionsBoundary: !Not [!Equals [!Ref PermissionsBoundary, '']]
 Resources:
+  ResourceVersion:
+    Type: AWS::CloudFormation::ResourceVersion
+    Properties:
+      TypeName: AWSQS::EKS::Cluster
+      LoggingConfig:
+        LogGroupName: awsqs-eks-cluster-logs
+        LogRoleArn: !GetAtt LogDeliveryRole.Arn
+      SchemaHandlerPackage: !Ref HandlerPackage
+      ExecutionRoleArn: !GetAtt ExecutionRole.Arn
+  ResourceDefaultVersion:
+    Type: AWS::CloudFormation::ResourceDefaultVersion
+    Properties:
+      TypeVersionArn: !Ref ResourceVersion
   ExecutionRole:
     Type: AWS::IAM::Role
+    Condition: CreateRole
     Properties:
+      RoleName: eks-cluster-execution
       PermissionsBoundary:
         Fn::If:
           - PermissionsBoundary
@@ -63,7 +82,9 @@ Resources:
                 Resource: "*"
   LogDeliveryRole:
     Type: AWS::IAM::Role
+    Condition: CreateRole
     Properties:
+      RoleName: eks-cluster-log-delivery
       PermissionsBoundary:
         Fn::If:
           - PermissionsBoundary
