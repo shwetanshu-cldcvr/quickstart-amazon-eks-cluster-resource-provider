@@ -287,27 +287,6 @@
                 "kms:DescribeKey",
                 "kms:CreateGrant"
             ]
-        },
-        "list": {
-            "permissions": [
-                "sts:GetCallerIdentity",
-                "eks:DescribeCluster",
-                "eks:ListClusters",
-                "eks:ListTagsForResource",
-                "lambda:UpdateFunctionConfiguration",
-                "lambda:DeleteFunction",
-                "lambda:GetFunction",
-                "lambda:InvokeFunction",
-                "lambda:CreateFunction",
-                "lambda:UpdateFunctionCode",
-                "ec2:DescribeVpcs",
-                "ec2:DescribeSubnets",
-                "ec2:DescribeSecurityGroups",
-                "iam:PassRole",
-                "cloudformation:ListExports",
-                "kms:DescribeKey",
-                "kms:CreateGrant"
-            ]
         }
     }
 }
