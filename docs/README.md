@@ -19,7 +19,7 @@ To declare this entity in your AWS CloudFormation template, use the following sy
         "<a href="#kubernetesnetworkconfig" title="KubernetesNetworkConfig">KubernetesNetworkConfig</a>" : <i><a href="kubernetesnetworkconfig.md">KubernetesNetworkConfig</a></i>,
         "<a href="#resourcesvpcconfig" title="ResourcesVpcConfig">ResourcesVpcConfig</a>" : <i><a href="resourcesvpcconfig.md">ResourcesVpcConfig</a></i>,
         "<a href="#enabledclusterloggingtypes" title="EnabledClusterLoggingTypes">EnabledClusterLoggingTypes</a>" : <i>[ String, ... ]</i>,
-        "<a href="#encryptionconfig" title="EncryptionConfig">EncryptionConfig</a>" : <i>[ [ <a href="encryptionconfig.md">EncryptionConfig</a>, ... ], ... ]</i>,
+        "<a href="#encryptionconfig" title="EncryptionConfig">EncryptionConfig</a>" : <i>[ <a href="encryptionconfigentry.md">EncryptionConfigEntry</a>, ... ]</i>,
         "<a href="#kubernetesapiaccess" title="KubernetesApiAccess">KubernetesApiAccess</a>" : <i><a href="kubernetesapiaccess.md">KubernetesApiAccess</a></i>,
         "<a href="#tags" title="Tags">Tags</a>" : <i>[ [ <a href="tags.md">Tags</a>, ... ], ... ]</i>
     }
@@ -40,8 +40,7 @@ Properties:
     <a href="#enabledclusterloggingtypes" title="EnabledClusterLoggingTypes">EnabledClusterLoggingTypes</a>: <i>
       - String</i>
     <a href="#encryptionconfig" title="EncryptionConfig">EncryptionConfig</a>: <i>
-      - 
-      - <a href="encryptionconfig.md">EncryptionConfig</a></i>
+      - <a href="encryptionconfigentry.md">EncryptionConfigEntry</a></i>
     <a href="#kubernetesapiaccess" title="KubernetesApiAccess">KubernetesApiAccess</a>: <i><a href="kubernetesapiaccess.md">KubernetesApiAccess</a></i>
     <a href="#tags" title="Tags">Tags</a>: <i>
       - 
@@ -130,7 +129,7 @@ Encryption configuration for the cluster.
 
 _Required_: No
 
-_Type_: List of List of <a href="encryptionconfig.md">EncryptionConfig</a>
+_Type_: List of <a href="encryptionconfigentry.md">EncryptionConfigEntry</a>
 
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 

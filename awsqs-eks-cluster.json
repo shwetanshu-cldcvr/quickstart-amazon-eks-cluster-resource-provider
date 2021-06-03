@@ -2,6 +2,49 @@
     "typeName": "AWSQS::EKS::Cluster",
     "description": "A resource that creates Amazon Elastic Kubernetes Service (Amazon EKS) clusters.",
     "sourceUrl": "https://github.com/aws-quickstart/quickstart-amazon-eks-cluster-resource-provider.git",
+    "definitions": {
+        "KubernetesApiAccessEntry": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "Arn": {"type": "string"},
+                    "Username": {"type": "string"},
+                    "Groups": {"type": "array", "items": {"type": "string"}}
+                }
+            }
+        },
+        "Provider": {
+            "description": "AWS Key Management Service (AWS KMS) customer master key (CMK). Either the ARN or the alias can be used.",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "KeyArn": {
+                    "description": "Amazon Resource Name (ARN) or alias of the customer master key (CMK). The CMK must be symmetric, created in the same region as the cluster, and if the CMK was created in a different account, the user must have access to the CMK.",
+                    "type": "string"
+                }
+            }
+        },
+        "EncryptionConfigEntry": {
+            "description": "The encryption configuration for the cluster.",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "Resources": {
+                    "type": "array",
+                    "description": "Specifies the resources to be encrypted. The only supported value is \"secrets\".",
+                    "items": {
+                        "description": "Specifies the resources to be encrypted. The only supported value is \"secrets\".",
+                        "type": "string"
+                    }
+                },
+                "Provider": {
+                    "$ref": "#/definitions/Provider"
+                }
+            }
+        }
+    },
     "properties": {
         "Name": {
             "description": "A unique name for your cluster.",
@@ -73,30 +116,7 @@
             "description": "Encryption configuration for the cluster.",
             "type": "array",
             "items": {
-                "description": "The encryption configuration for the cluster.",
-                "type": "object",
-                "additionalProperties": false,
-                "properties": {
-                    "Resources": {
-                        "type": "array",
-                        "description": "Specifies the resources to be encrypted. The only supported value is \"secrets\".",
-                        "items": {
-                            "description": "Specifies the resources to be encrypted. The only supported value is \"secrets\".",
-                            "type": "string"
-                        }
-                    },
-                    "Provider": {
-                        "description": "AWS Key Management Service (AWS KMS) customer master key (CMK). Either the ARN or the alias can be used.",
-                        "type": "object",
-                        "additionalProperties": false,
-                        "properties": {
-                            "KeyArn": {
-                                "description": "Amazon Resource Name (ARN) or alias of the customer master key (CMK). The CMK must be symmetric, created in the same region as the cluster, and if the CMK was created in a different account, the user must have access to the CMK.",
-                                "type": "string"
-                            }
-                        }
-                    }
-                }
+                "$ref": "#/definitions/EncryptionConfigEntry"
             }
         },
         "KubernetesApiAccess": {
@@ -106,26 +126,13 @@
                 "Roles": {
                     "type": "array",
                     "items": {
-                        "type": "object",
-                        "additionalProperties": false,
-                        "properties": {
-                            "Arn": {"type": "string"},
-                            "Username": {"type": "string"},
-                            "Groups": {"type": "array", "items": {"type": "string"}}
-                        }
+                        "$ref": "#/definitions/KubernetesApiAccessEntry"
                     }
                 },
                 "Users": {
                     "type": "array",
                     "items": {
-                        "type": "object",
-                        "additionalProperties": false,
-                        "properties": {
-                            "Arn": {"type": "string"},
-                            "Username": {"type": "string"},
-                            "Groups": {"type": "array", "items": {"type": "string"}}
-                        },
-                        "required": ["Arn", "Groups"]
+                        "$ref": "#/definitions/KubernetesApiAccessEntry"
                     }
                 }
             }
