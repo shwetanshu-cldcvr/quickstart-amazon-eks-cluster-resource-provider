@@ -29,7 +29,10 @@ Resources:
     Properties:
       TemplateURL: 'https://aws-quickstart.s3.us-east-1.amazonaws.com/quickstart-aws-vpc/templates/aws-vpc.template'
       Parameters:
-        AvailabilityZones: "us-east-1a,us-east-1b"
+        AvailabilityZones: !Sub
+        - "${AZ1},${AZ2}"
+        - AZ1: !Select [0, Fn::GetAZs: !Ref 'AWS::Region']
+          AZ2: !Select [1, Fn::GetAZs: !Ref 'AWS::Region']
         NumberOfAZs: 2
         PrivateSubnet1ACIDR: '10.0.0.0/24'
         PrivateSubnet2ACIDR: '10.0.1.0/24'
