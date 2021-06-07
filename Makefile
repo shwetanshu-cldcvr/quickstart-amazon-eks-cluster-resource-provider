@@ -20,10 +20,10 @@ package: build
 	find . -exec touch -t 202007010000.00 {} +
 	zip -Xr awsqs-eks-cluster.zip ./handler.zip ./schema.json ./.rpdk-config ./inputs
 	rm ./handler.zip ./schema.json
+	aws s3 cp ./awsqs-eks-cluster.zip s3://$(BUCKET)/
 
-register: package
+register:
 	set -ex ; \
-	aws s3 cp ./awsqs-eks-cluster.zip s3://$(BUCKET)/ ;\
 	R_LOG_ROLE=$(LOG_ROLE) ;\
 	if [ "$(LOG_ROLE)" == "use-existing" ] ; then \
 	  R_LOG_ROLE=`aws cloudformation describe-type --type RESOURCE --type-name "$(TYPE_NAME)" --region $(REGION) --output text --query LoggingConfig.LogRoleArn` ;\
