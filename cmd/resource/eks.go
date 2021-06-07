@@ -40,9 +40,9 @@ func describeClusterToModel(cluster eks.Cluster, model *Model) {
 		}
 	}
 	if cluster.EncryptionConfig != nil {
-		var encryptionConfigs []EncryptionConfig
+		var encryptionConfigs []EncryptionConfigEntry
 		for _, e := range cluster.EncryptionConfig {
-			encryptionConfigs = append(encryptionConfigs, EncryptionConfig{
+			encryptionConfigs = append(encryptionConfigs, EncryptionConfigEntry{
 				Resources: aws.StringValueSlice(e.Resources),
 				Provider: &Provider{
 					KeyArn: e.Provider.KeyArn,

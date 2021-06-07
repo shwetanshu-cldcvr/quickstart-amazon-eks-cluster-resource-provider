@@ -8,8 +8,8 @@ To declare this entity in your AWS CloudFormation template, use the following sy
 
 <pre>
 {
-    "<a href="#roles" title="Roles">Roles</a>" : <i>[ [ <a href="kubernetesapiaccessentry.md">KubernetesApiAccessEntry</a>, ... ], ... ]</i>,
-    "<a href="#users" title="Users">Users</a>" : <i>[ [ <a href="kubernetesapiaccessentry.md">KubernetesApiAccessEntry</a>, ... ], ... ]</i>
+    "<a href="#roles" title="Roles">Roles</a>" : <i>[ <a href="kubernetesapiaccessentry.md">KubernetesApiAccessEntry</a>, ... ]</i>,
+    "<a href="#users" title="Users">Users</a>" : <i>[ <a href="kubernetesapiaccessentry.md">KubernetesApiAccessEntry</a>, ... ]</i>
 }
 </pre>
 
@@ -17,10 +17,8 @@ To declare this entity in your AWS CloudFormation template, use the following sy
 
 <pre>
 <a href="#roles" title="Roles">Roles</a>: <i>
-      - 
       - <a href="kubernetesapiaccessentry.md">KubernetesApiAccessEntry</a></i>
 <a href="#users" title="Users">Users</a>: <i>
-      - 
       - <a href="kubernetesapiaccessentry.md">KubernetesApiAccessEntry</a></i>
 </pre>
 
@@ -30,7 +28,7 @@ To declare this entity in your AWS CloudFormation template, use the following sy
 
 _Required_: No
 
-_Type_: List of List of <a href="kubernetesapiaccessentry.md">KubernetesApiAccessEntry</a>
+_Type_: List of <a href="kubernetesapiaccessentry.md">KubernetesApiAccessEntry</a>
 
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 
@@ -38,7 +36,7 @@ _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormati
 
 _Required_: No
 
-_Type_: List of List of <a href="kubernetesapiaccessentry.md">KubernetesApiAccessEntry</a>
+_Type_: List of <a href="kubernetesapiaccessentry.md">KubernetesApiAccessEntry</a>
 
 _Update requires_: [No interruption](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-no-interrupt)
 
