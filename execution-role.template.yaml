@@ -41,6 +41,13 @@ Resources:
                   - "ec2:DescribeSecurityGroups"
                   - "kms:CreateGrant"
                   - "kms:DescribeKey"
+                  - "logs:CreateLogGroup"
+                  - "logs:CreateLogStream"
+                  - "logs:DescribeLogGroups"
+                  - "logs:DescribeLogStreams"
+                  - "logs:PutLogEvents"
+                  - "cloudwatch:ListMetrics"
+                  - "cloudwatch:PutMetricData"
                 Resource: "*"
 Outputs:
   ExecutionRoleArn: 
