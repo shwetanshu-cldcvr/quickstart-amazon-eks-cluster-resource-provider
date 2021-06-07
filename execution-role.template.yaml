@@ -33,7 +33,7 @@ Resources:
                   - "lambda:UpdateFunctionConfiguration"
                   - "lambda:DeleteFunction"
                   - "lambda:GetFunction"
-                  - "lambda:Invoke"
+                  - "lambda:InvokeFunction"
                   - "lambda:CreateFunction"
                   - "lambda:UpdateFunctionCode"
                   - "ec2:DescribeVpcs"
