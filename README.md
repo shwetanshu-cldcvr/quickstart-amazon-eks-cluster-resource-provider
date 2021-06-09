@@ -1,32 +1,28 @@
 # AWSQS::EKS::Cluster
-***beta***
- 
+
 An AWS CloudFormation resource provider for modelling Amazon EKS clusters. 
-It provides some additional functionality to the built-in resource provider:
+It provides some additional functionality to the native `AWS::EKS::Cluster` resource type:
 
 * Manage `aws-auth` ConfigMap from within CloudFormation.
 * Support for `EndpointPublicAccess`, `EndpointPrivateAccess` and 
 `PublicAccessCidrs` features.
 * Support for enabling control plane logging to CloudWatch logs.   
+* Support for tagging
 
-Properties and available attributes (ReadOnlyProperties) are documented in 
-the [schema](./awsqs-eks-cluster.json).
+## Prerequisites
 
-## Installation
-```bash
-aws cloudformation create-stack \
-  --stack-name awsqs-eks-cluster-resource \
-  --capabilities CAPABILITY_NAMED_IAM \
-  --template-url https://s3.amazonaws.com/aws-quickstart/quickstart-amazon-eks-cluster-resource-provider/deploy.template.yaml \
-  --region us-west-2 \
-  --parameters ParameterKey=CreateClusterAccessRole,ParameterValue='true' # set to false if you have already deployed once in another region
-```
-A [template](./deploy.template.yaml) is provided to make deploying the resource into 
-an account easy. Set `CreateClusterAccessRole` to `false` if the execution role has 
-already been created (if you've previously added the resource to another region in the same account).
+### IAM role
+An IAM role is used by CloudFormation to execute the resource type handler code provided by this project. A CloudFormation template to create the execution role is available [here](https://github.com/aws-quickstart/quickstart-amazon-eks-cluster-resource-provider/blob/main/execution-role.template.yaml) 
 
-Example usage:
+## Registering the Resource type
+To privately register the resource types provided in this project into your account a CloudFromation template has been provided [here](https://github.com/aws-quickstart/quickstart-eks-cluster-provider/blob/main/register-type.template.yaml). Note that this must be run in each region yo plan to use this project in.
 
+## Usage
+Properties and return values are documented [here](https://github.com/aws-quickstart/quickstart-amazon-eks-cluster-resource-provider/blob/main/docs/README.md).
+
+## Examples
+
+### Create a private EKS cluster with an additional user and role allowed to access the kubenretes API
 ```yaml
 AWSTemplateFormatVersion: "2010-09-09"
 Parameters:
@@ -46,15 +42,15 @@ Resources:
         SubnetIds: !Ref SubnetIds
         SecurityGroupIds: !Ref SecurityGroupIds
         EndpointPrivateAccess: true
-        EndpointPublicAccess: true
+        EndpointPublicAccess: false
       EnabledClusterLoggingTypes: ["audit"]
       KubernetesApiAccess:
         Users:
-          - Arn: "arn:${AWS::Partition}:iam::${AWS::AccountId}:user/my-user"
+          - Arn: !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:user/my-user"
             Username: "CliUser"
             Groups: ["system:masters"]
         Roles:
-          - Arn: "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/my-role"
+          - Arn: !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/my-role"
             Username: "AdminRole"
             Groups: ["system:masters"]
       Tags:
