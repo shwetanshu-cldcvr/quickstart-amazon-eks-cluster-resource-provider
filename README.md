@@ -15,7 +15,7 @@ It provides some additional functionality to the native `AWS::EKS::Cluster` reso
 An IAM role is used by CloudFormation to execute the resource type handler code provided by this project. A CloudFormation template to create the execution role is available [here](https://github.com/aws-quickstart/quickstart-amazon-eks-cluster-resource-provider/blob/main/execution-role.template.yaml) 
 
 ## Registering the Resource type
-To privately register the resource types provided in this project into your account a CloudFromation template has been provided [here](https://github.com/aws-quickstart/quickstart-eks-cluster-provider/blob/main/register-type.template.yaml). Note that this must be run in each region yo plan to use this project in.
+To privately register the resource types provided in this project into your account a CloudFromation template has been provided [here](https://github.com/aws-quickstart/quickstart-amazon-eks-cluster-resource-provider/blob/main/register-type.template.yaml). Note that this must be run in each region yo plan to use this project in.
 
 ## Usage
 Properties and return values are documented [here](https://github.com/aws-quickstart/quickstart-amazon-eks-cluster-resource-provider/blob/main/docs/README.md).
