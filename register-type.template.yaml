@@ -10,7 +10,7 @@ Resources:
     Properties:
       TypeName: AWSQS::EKS::Cluster
       LoggingConfig:
-        LogGroupName: cloudformation/registry/awsqs-kubernetes-resource
+        LogGroupName: cloudformation/registry/awsqs-eks-cluster
         LogRoleArn: !Ref ExecutionRoleArn
       SchemaHandlerPackage: s3://aws-quickstart/quickstart-amazon-eks-cluster-resource-provider/awsqs-eks-cluster.zip
       ExecutionRoleArn: !Ref ExecutionRoleArn
