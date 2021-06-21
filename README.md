@@ -22,7 +22,7 @@ Properties and return values are documented [here](https://github.com/aws-quicks
 
 ## Examples
 
-### Create a private EKS cluster with an additional user and role allowed to access the kubenretes API
+### Create a private EKS cluster with an additional user and role allowed to access the Kubernetes API
 ```yaml
 AWSTemplateFormatVersion: "2010-09-09"
 Parameters:
