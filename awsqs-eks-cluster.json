@@ -61,7 +61,7 @@
         "Version": {
             "description": "Desired Kubernetes version for your cluster. If you don't specify this value, the cluster uses the latest version from Amazon EKS.",
             "type": "string",
-            "default": "1.19"
+            "default": "1.21"
         },
         "KubernetesNetworkConfig": {
             "description": "Network configuration for Amazon EKS cluster.\n\n",
