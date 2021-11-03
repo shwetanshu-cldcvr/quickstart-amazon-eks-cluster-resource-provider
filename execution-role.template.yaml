@@ -51,7 +51,6 @@ Resources:
                 Resource: "*"
   VpcProxyRole:
     Type: AWS::IAM::Role
-    Condition: CreateRole
     Properties:
       RoleName: CloudFormation-Kubernetes-VPC
       PermissionsBoundary:
