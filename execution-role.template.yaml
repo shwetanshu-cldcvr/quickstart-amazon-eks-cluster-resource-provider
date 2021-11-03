@@ -53,11 +53,6 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       RoleName: CloudFormation-Kubernetes-VPC
-      PermissionsBoundary:
-        Fn::If:
-          - PermissionsBoundary
-          - Ref: PermissionsBoundary
-          - Ref: AWS::NoValue
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
