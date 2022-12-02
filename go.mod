@@ -9,7 +9,7 @@ require (
 	github.com/jinzhu/copier v0.0.0-20190924061706-b57f9002281a
 	k8s.io/api v0.22.1
 	k8s.io/apimachinery v0.22.1
-	k8s.io/client-go v0.25.4
+	k8s.io/client-go v0.22.1
 	sigs.k8s.io/aws-iam-authenticator v0.5.3
 )
 
