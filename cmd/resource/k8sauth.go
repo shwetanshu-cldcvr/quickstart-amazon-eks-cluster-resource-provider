@@ -1,6 +1,7 @@
 package resource
 
 import (
+	"context"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
@@ -106,7 +107,7 @@ type roleMapping struct {
 }
 
 func (i IamAuthMap) GetFromCluster(clientset *kubernetes.Clientset) (*IamAuthMap, error) {
-	auth, err := clientset.CoreV1().ConfigMaps("kube-system").Get("aws-auth", metav1.GetOptions{})
+	auth, err := clientset.CoreV1().ConfigMaps("kube-system").Get(context.Background(), "aws-auth", metav1.GetOptions{})
 	if err != nil {
 		return nil, err
 	}
@@ -181,9 +182,10 @@ func (i IamAuthMap) PushConfigMap(clientset *kubernetes.Clientset) error {
 		},
 		Data: data,
 	}
-	_, err := clientset.CoreV1().ConfigMaps("kube-system").Update(authConfigMap)
+	ctx := context.Background()
+	_, err := clientset.CoreV1().ConfigMaps("kube-system").Update(ctx, authConfigMap, metav1.UpdateOptions{})
 	if errors.IsNotFound(err) {
-		_, err = clientset.CoreV1().ConfigMaps("kube-system").Create(authConfigMap)
+		_, err = clientset.CoreV1().ConfigMaps("kube-system").Create(ctx, authConfigMap, metav1.CreateOptions{})
 	}
 	if err != nil {
 		return err
@@ -255,11 +257,12 @@ func putAwsAuthAdminRole(clientset *kubernetes.Clientset) error {
 			},
 		},
 	}
-	_, err := clientset.RbacV1().Roles("kube-system").Get("aws-auth-admin", metav1.GetOptions{})
+	ctx := context.Background()
+	_, err := clientset.RbacV1().Roles("kube-system").Get(ctx, "aws-auth-admin", metav1.GetOptions{})
 	if !errors.IsNotFound(err) {
-		_, err = clientset.RbacV1().Roles("kube-system").Create(role)
+		_, err = clientset.RbacV1().Roles("kube-system").Create(ctx, role, metav1.CreateOptions{})
 	} else {
-		_, err = clientset.RbacV1().Roles("kube-system").Update(role)
+		_, err = clientset.RbacV1().Roles("kube-system").Update(ctx, role, metav1.UpdateOptions{})
 	}
 	if err != nil {
 		return err
@@ -282,11 +285,11 @@ func putAwsAuthAdminRole(clientset *kubernetes.Clientset) error {
 			Name:     "aws-auth-admin",
 		},
 	}
-	_, err = clientset.RbacV1().RoleBindings("kube-system").Get("aws-auth-admin", metav1.GetOptions{})
+	_, err = clientset.RbacV1().RoleBindings("kube-system").Get(ctx, "aws-auth-admin", metav1.GetOptions{})
 	if !errors.IsNotFound(err) {
-		_, err = clientset.RbacV1().RoleBindings("kube-system").Create(roleBinding)
+		_, err = clientset.RbacV1().RoleBindings("kube-system").Create(ctx, roleBinding, metav1.CreateOptions{})
 	} else {
-		_, err = clientset.RbacV1().RoleBindings("kube-system").Update(roleBinding)
+		_, err = clientset.RbacV1().RoleBindings("kube-system").Update(ctx, roleBinding, metav1.UpdateOptions{})
 	}
 	if err != nil {
 		return err
