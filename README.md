@@ -1,5 +1,5 @@
-# Deprecation Notice
-On 03/31/2023. Support for this Public Resource type will be retired. Please see [Issue #60](https://github.com/aws-quickstart/quickstart-amazon-eks-cluster-resource-provider/issues/60)for more information.
+# Retirement Notice
+On 03/31/2023. Support for this Public Resource type will be retired. Please see [Issue #60](https://github.com/aws-quickstart/quickstart-amazon-eks-cluster-resource-provider/issues/60) for more information.
 
 
 # AWSQS::EKS::Cluster
