@@ -1,6 +1,6 @@
 .PHONY: build publish clean
 
-REGION ?= us-east-1
+REGION ?= us-west-2
 BUCKET ?= uno-resource-type-dev
 EX_ROLE ?= arn:aws:iam::336362434857:role/awsqs-eks-cluster-role-ExecutionRole-1N0EPCB463380
 
@@ -20,7 +20,6 @@ publish:
         --type "RESOURCE" \
         --type-name  "AWSQS::EKS::$${TYPE_NAME}" \
         --schema-handler-package s3://$(BUCKET)/awsqs_eks_$${n}.zip \
-        --logging-config LogRoleArn=$(LOG_ROLE),LogGroupName=/cloudformation/registry/awsqs-eks-$${n} \
         --execution-role-arn $(EX_ROLE) \
         --region $(REGION) \
         --query RegistrationToken \

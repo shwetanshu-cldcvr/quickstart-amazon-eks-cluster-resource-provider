@@ -10,6 +10,7 @@ WORKDIR /build
 
 RUN cd src && zip -r -q ../ResourceProvider.zip ./ && \
     cd ../ && \
+    mv awsqs_eks_cluster.json schema.json && \
     find . -exec touch -t 202007010000.00 {} + && \
     zip -X -r -q ./awsqs_eks_cluster.zip ./ResourceProvider.zip schema.json .rpdk-config
 
