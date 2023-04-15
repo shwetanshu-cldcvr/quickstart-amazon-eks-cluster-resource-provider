@@ -1,9 +1,9 @@
 .PHONY: build publish clean
 
 REGION ?= us-east-1
-BUCKET ?= jmmccon-uno-dev
-EX_ROLE ?= arn:aws:iam::<ACCOUNT_ID>:role/<ROLE_NAME>
-LOG_ROLE ?= arn:aws:iam::<ACCOUNT_ID>:role/<ROLE_NAME>
+BUCKET ?= uno-resource-type-dev
+EX_ROLE ?= arn:aws:iam::336362434857:role/awsqs-eks-cluster-role-ExecutionRole-1N0EPCB463380
+
 
 build:
 	docker build . -t k8s-cfn-build
