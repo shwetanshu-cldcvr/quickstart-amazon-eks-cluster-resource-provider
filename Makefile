@@ -1,6 +1,6 @@
 .PHONY: build publish clean
 
-REGION ?= us-west-2
+REGION ?= us-east-1
 BUCKET ?= uno-resource-type-dev
 EX_ROLE ?= arn:aws:iam::336362434857:role/awsqs-eks-cluster-role-ExecutionRole-1N0EPCB463380
 
