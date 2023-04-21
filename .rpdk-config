@@ -4,7 +4,7 @@
     "language": "python39",
     "runtime": "python3.9",
     "entrypoint": "awsqs_eks_cluster.handlers.resource",
-    "testEntrypoint": "awsqs_eks_cluster.handlers.resource",
+    "testEntrypoint": "awsqs_eks_cluster.handlers.test_entrypoint",
     "settings": {
         "version": false,
         "subparser_name": null,
